@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<title>Bodyscan bei Stress – Q2 GK PER</title>
+<style>
+  :root{
+    --bg:#f4f6fb;
+    --paper:#ffffff;
+    --ink:#172033;
+    --muted:#667085;
+    --line:#d8deea;
+    --accent:#4056a1;
+    --accent2:#eef1ff;
+    --good:#eaf7ef;
+    --warn:#fff7e8;
+    --soft:#f8fafc;
+    --shadow:0 10px 30px rgba(31,41,55,.08);
+    --radius:18px;
+  }
+
+  *{box-sizing:border-box}
+  html{
+    scroll-behavior:smooth;
+    -webkit-text-size-adjust:100%;
+  }
+  body{
+    margin:0;
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    color:var(--ink);
+    line-height:1.55;
+    background:#f4f6fb;
+    min-height:100vh;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  a{color:var(--accent)}
+  button,input,textarea,select{touch-action:manipulation}
+
+  .topbar{
+    position:sticky; top:0; z-index:20;
+    background:#ffffff;
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{
+    max-width:1180px; margin:auto; padding:10px 18px;
+    display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+  }
+  .brand{font-weight:800;letter-spacing:-.02em}
+  .nav{display:flex;gap:7px;flex-wrap:wrap}
+  .nav a{
+    text-decoration:none;color:var(--ink);background:var(--soft);
+    border:1px solid var(--line);border-radius:999px;padding:8px 11px;
+    font-size:.88rem;font-weight:650;min-height:38px;
+  }
+  .nav a:active{background:var(--accent2)}
+  .save-note{font-size:.8rem;color:var(--muted)}
+
+  main{max-width:1180px;margin:auto;padding:28px 18px 70px}
+
+  .hero{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(135deg,rgba(255,255,255,.98) 0%,rgba(241,244,255,.98) 100%);
+    border:1px solid #dfe4f4;
+    box-shadow:var(--shadow);
+    border-radius:24px;
+    padding:26px 28px;
+    margin-bottom:22px;
+  }
+  .hero::after{
+    content:"";
+    position:absolute;
+    width:180px;height:180px;border-radius:50%;
+    right:-70px;bottom:-80px;
+    background:rgba(64,86,161,.08);
+    pointer-events:none;
+  }
+  .eyebrow{
+    font-size:.82rem;font-weight:850;color:var(--accent);
+    text-transform:uppercase;letter-spacing:.09em
+  }
+  h1{
+    font-size:clamp(1.8rem,3.2vw,2.65rem);
+    line-height:1.08;margin:.4rem 0 .8rem;letter-spacing:-.035em;
+    max-width:950px;
+  }
+  h2{font-size:1.55rem;margin:0 0 8px;letter-spacing:-.02em}
+  h3{font-size:1.05rem;margin:.1rem 0 .45rem}
+
+  .goal{
+    background:white;border-left:5px solid var(--accent);
+    padding:14px 16px;border-radius:12px;margin-top:16px;font-weight:650;
+  }
+  .meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+  .field-inline{display:flex;gap:8px;align-items:center}
+  .field-inline label{font-weight:700;white-space:nowrap}
+
+  input[type=text],input[type=number],select,textarea{
+    width:100%;
+    border:1.5px solid #cfd6e4;
+    border-radius:11px;
+    padding:12px 13px;
+    font:inherit;color:var(--ink);background:white;outline:none;
+    transition:.15s border,.15s box-shadow;
+    min-height:46px;
+  }
+  input:focus,select:focus,textarea:focus{
+    border-color:#7585d1;
+    box-shadow:0 0 0 3px rgba(64,86,161,.12)
+  }
+  textarea{min-height:92px;resize:vertical}
+
+  .section{
+    background:rgba(255,255,255,.98);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+    border-radius:var(--radius);
+    padding:24px;
+    margin:18px 0;
+    scroll-margin-top:95px;
+  }
+  .stephead{display:flex;gap:14px;align-items:flex-start;margin-bottom:16px}
+  .stepno{
+    width:38px;height:38px;display:grid;place-items:center;border-radius:12px;
+    background:var(--accent);color:white;font-weight:900;flex:0 0 auto;
+  }
+
+  .task{
+    background:var(--accent2);
+    border:1px solid #d4daf6;
+    border-radius:14px;
+    padding:14px 16px;
+    margin:14px 0 18px;
+  }
+  .task strong{color:#243778}
+
+  .protocol-intro{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:13px 15px;
+    border-radius:14px;
+    background:#f0f7f6;
+    border:1px solid #c9e3df;
+    margin:12px 0 16px;
+  }
+  .protocol-intro strong{color:#14675f}
+  .protocol-wrap{
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:white;
+  }
+  .protocol-table{
+    width:100%;
+    min-width:820px;
+    table-layout:fixed;
+    border-collapse:collapse;
+  }
+  .protocol-table th{
+    background:linear-gradient(180deg,#167e75 0%,#117168 100%);
+    color:white;
+    font-weight:800;
+    text-align:left;
+    padding:13px 12px;
+  }
+  .protocol-table td{
+    padding:13px 12px;
+    border-top:1px solid #d9e7e5;
+    vertical-align:middle;
+    background:#fff;
+  }
+  .protocol-table tr:nth-child(even) td{background:#f8fbfb}
+  .protocol-table th:nth-child(1), .protocol-table td:nth-child(1){width:36%}
+  .protocol-table th:nth-child(2), .protocol-table td:nth-child(2){width:18%}
+  .protocol-table th:nth-child(3), .protocol-table td:nth-child(3){width:18%}
+  .protocol-table th:nth-child(4), .protocol-table td:nth-child(4){width:28%}
+  .protocol-criterion{font-weight:720}
+  .protocol-select,
+  .protocol-number{
+    width:100%;
+    min-height:48px;
+    font-size:1rem;
+    background:white;
+  }
+  .protocol-result{
+    min-height:48px;
+    display:flex;
+    align-items:center;
+    padding:10px 11px;
+    border-radius:10px;
+    background:#f5f7fa;
+    border:1px solid #e0e5ed;
+    color:#344054;
+    font-weight:700;
+  }
+  .protocol-result.empty{
+    color:#98a2b3;
+    font-weight:600;
+    font-style:italic;
+  }
+  .protocol-legend{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:10px;
+    color:var(--muted);
+    font-size:.82rem;
+  }
+  .protocol-pill{
+    background:white;
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:5px 9px;
+  }
+
+  .fachtext{
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:20px 22px;
+    background:linear-gradient(180deg,#ffffff 0%,#fbfcff 100%);
+  }
+  .fachtext p{margin:.75rem 0}
+  .fachtext p:first-child{margin-top:0}
+  .fachtext p:last-child{margin-bottom:0}
+
+  .note{
+    padding:14px 16px;border-radius:14px;background:var(--warn);
+    border:1px solid #ecd8ab;margin:14px 0;
+  }
+  .note.good{background:var(--good);border-color:#bfe3cc}
+
+  details{
+    border:1px solid var(--line);border-radius:14px;background:white;overflow:hidden;
+  }
+  details + details{margin-top:10px}
+  summary{
+    cursor:pointer;list-style:none;padding:15px 16px;font-weight:800;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    background:var(--soft);
+    min-height:52px;
+  }
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"＋";font-size:1.15rem;color:var(--accent)}
+  details[open] summary::after{content:"−"}
+  .details-body{padding:16px}
+
+  .drag-instruction{
+    margin:14px 0 12px;
+    padding:14px 16px;
+    border:1px solid #d4daf6;
+    border-radius:14px;
+    background:#f6f7ff;
+  }
+  .drag-pool{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    padding:12px;
+    margin:10px 0 16px;
+    border:1px dashed #bac3d6;
+    border-radius:14px;
+    background:#fbfcff;
+    min-height:70px;
+  }
+  .drag-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    max-width:100%;
+    padding:9px 11px;
+    border:1px solid #cfd6e4;
+    border-radius:12px;
+    background:white;
+    box-shadow:0 2px 6px rgba(31,41,55,.06);
+    font-size:.88rem;
+    font-weight:700;
+    cursor:pointer;
+    user-select:none;
+    touch-action:manipulation;
+  }
+  .drag-chip:active{cursor:pointer}
+  .drag-chip.selected{
+    outline:3px solid rgba(64,86,161,.18);
+    border-color:#7585d1;
+    background:#f1f3ff;
+  }
+  .drag-chip.correct{
+    background:#eaf7ef;
+    border-color:#86c89c;
+    color:#21663a;
+    cursor:default;
+  }
+  .drag-chip.correct::before{
+    content:"✓";
+    font-weight:900;
+  }
+
+  .drag-chip.touch-drag-source{
+    opacity:.35;
+  }
+
+  .drag-ghost{
+    position:fixed;
+    left:0;
+    top:0;
+    z-index:9999;
+    max-width:min(390px,78vw);
+    padding:10px 12px;
+    border:2px solid #7585d1;
+    border-radius:12px;
+    background:#fff;
+    box-shadow:0 12px 28px rgba(31,41,55,.22);
+    font-size:.88rem;
+    font-weight:750;
+    color:var(--ink);
+    pointer-events:none;
+    transform:translate(-50%,-58%);
+    opacity:.98;
+  }
+  .drop-zone{
+    min-height:118px;
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    padding:10px;
+    border:2px dashed #cbd3e1;
+    border-radius:12px;
+    background:#fffefa;
+    transition:.15s border,.15s background,.15s box-shadow;
+  }
+  .drop-zone.drag-over{
+    border-color:#7585d1;
+    background:#f3f5ff;
+    box-shadow:inset 0 0 0 2px rgba(64,86,161,.06);
+  }
+  .drop-zone.wrong{
+    border-color:#d97070;
+    background:#fff1f1;
+    animation:shake .18s linear 2;
+  }
+  .drop-zone.complete{
+    border-color:#86c89c;
+    background:#f4fbf6;
+  }
+  .drop-placeholder{
+    color:#98a2b3;
+    font-size:.82rem;
+    font-style:italic;
+  }
+  .drag-progress{
+    font-size:.82rem;
+    color:var(--muted);
+    margin-top:8px;
+  }
+  .drag-progress strong{color:#21663a}
+  @keyframes shake{
+    0%{transform:translateX(0)}
+    25%{transform:translateX(-3px)}
+    75%{transform:translateX(3px)}
+    100%{transform:translateX(0)}
+  }
+
+
+  .drag-chip.pending{
+    background:#fff8e8;
+    border-color:#e2bd65;
+    color:#6d4b00;
+  }
+
+  .drag-feedback{
+    margin-top:10px;
+    min-height:24px;
+    font-size:.88rem;
+    font-weight:700;
+    color:#344054;
+  }
+  .drag-feedback.good{color:#21663a}
+  .drag-feedback.warn{color:#8a5a00}
+
+  .method-check-feedback{
+    margin-top:10px;
+    min-height:48px;
+    padding:11px 12px;
+    border-radius:11px;
+    background:#f5f7fa;
+    border:1px solid #e0e5ed;
+    color:#344054;
+    font-weight:700;
+  }
+  .method-check-feedback.good{
+    background:#eaf7ef;
+    border-color:#bfe3cc;
+    color:#21663a;
+  }
+  .method-check-feedback.warn{
+    background:#fff7e8;
+    border-color:#ecd8ab;
+    color:#7a5200;
+  }
+  .method-check-row{margin-top:14px}
+  button:disabled{
+    cursor:not-allowed;
+    opacity:.5;
+  }
+
+  .extract-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+    margin:16px 0;
+  }
+  .extract-card{
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:15px;
+    background:#fbfcff;
+  }
+  .extract-number{
+    width:34px;height:34px;flex:0 0 auto;display:grid;place-items:center;
+    border-radius:10px;background:var(--accent2);color:#243778;font-weight:900;
+  }
+  .extract-content{flex:1;min-width:0}
+  .extract-content textarea{min-height:88px;margin-top:7px}
+  .extract-status{
+    margin-top:8px;padding:8px 10px;border-radius:10px;background:#f5f7fa;
+    border:1px solid #e0e5ed;color:#667085;font-size:.86rem;font-weight:700;
+  }
+  .extract-status.good{background:var(--good);border-color:#bfe3cc;color:#21663a}
+  .extract-status.warn{background:var(--warn);border-color:#ecd8ab;color:#7a5617}
+  .student-table-answer{
+    min-height:70px;padding:10px 11px;border-radius:10px;background:#fffefa;
+    border:1px solid #e4d7ab;white-space:pre-wrap;
+  }
+  .student-table-answer.confirmed{background:#f4fbf6;border-color:#86c89c;color:#21663a}
+
+  .table-wrap{
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:white;
+  }
+  table{
+    border-collapse:collapse;
+    width:100%;
+    min-width:980px;
+    table-layout:fixed;
+    background:white;
+  }
+  th,td{
+    border-bottom:1px solid var(--line);
+    border-right:1px solid var(--line);
+    padding:12px;
+    vertical-align:top;
+  }
+  th:last-child,td:last-child{border-right:0}
+  tr:last-child td{border-bottom:0}
+  th{background:#f0f3f9;text-align:left;font-size:.9rem}
+  th:nth-child(1), td:nth-child(1){width:19%}
+  th:nth-child(2), td:nth-child(2){width:18%}
+  th:nth-child(3), td:nth-child(3){width:18%}
+  th:nth-child(4), td:nth-child(4){width:45%}
+  th,td{overflow-wrap:anywhere;word-break:normal;hyphens:auto}
+  td:first-child{font-weight:800;white-space:normal}
+  .known{color:#344054;font-size:.93rem}
+  .editcell{background:#fffdf7}
+  .editcell textarea{
+    min-height:125px;
+    background:#fffefa;
+    border-color:#e4d7ab;
+    resize:vertical;
+  }
+
+
+  .case-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .case-card summary{font-size:1.05rem}
+  .case-a summary{background:#eef5ff}
+  .case-b summary{background:#fff2ef}
+  .case-body{font-size:1rem}
+  .badge{
+    display:inline-block;border-radius:999px;padding:4px 8px;background:#edf0f7;
+    font-size:.78rem;font-weight:800;margin-right:4px;margin-bottom:4px;color:#39445b;
+  }
+  .criteria-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .criterion{border:1px solid var(--line);border-radius:12px;padding:12px;background:white}
+  .criterion strong{display:block;margin-bottom:7px}
+
+  .tips-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin:14px 0;
+    align-items:stretch;
+  }
+  .tips-grid > details{
+    height:100%;
+    min-height:58px;
+    display:flex;
+    flex-direction:column;
+  }
+  .tips-grid > details > summary{
+    height:58px;
+    min-height:58px;
+    display:flex;
+    align-items:center;
+    padding-top:0;
+    padding-bottom:0;
+  }
+  .tips-grid > details[open] .details-body{
+    flex:1;
+  }
+  .judgment-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .full{grid-column:1/-1}
+
+  .handwriting-details{
+    margin-top:12px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:#fff;
+    overflow:hidden;
+  }
+  .handwriting-details > summary{
+    background:#f8fafc;
+    min-height:48px;
+    padding:11px 13px;
+    font-size:.88rem;
+    color:#344054;
+  }
+  .handwriting-details[open] > summary{
+    border-bottom:1px solid var(--line);
+  }
+  .handwriting-panel{
+    padding:12px;
+    background:linear-gradient(180deg,#ffffff 0%,#fbfcff 100%);
+  }
+  .handwriting-panel .tiny{margin:0 0 10px}
+  .handwriting-canvas-wrap{
+    border:1.5px solid #cfd6e4;
+    border-radius:14px;
+    background:#fff;
+    overflow:hidden;
+    min-height:330px;
+  }
+  .handwriting-canvas{
+    display:block;
+    width:100%;
+    height:330px;
+    background:#fff;
+    touch-action:none;
+    cursor:crosshair;
+  }
+  .handwriting-details.judgment-handwriting .handwriting-canvas-wrap{
+    min-height:390px;
+  }
+  .handwriting-details.judgment-handwriting .handwriting-canvas{
+    height:390px;
+  }
+
+  .criteria-overview{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:14px;
+    margin:16px 0 20px;
+  }
+  .overview-card{
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:linear-gradient(180deg,#ffffff 0%,#fafbfe 100%);
+    padding:16px;
+    min-height:220px;
+  }
+  .overview-card h3{
+    margin:0 0 4px;
+    font-size:1.02rem;
+  }
+  .overview-card .overview-sub{
+    margin:0 0 12px;
+    color:var(--muted);
+    font-size:.84rem;
+  }
+  .overview-list{
+    margin:0;
+    padding-left:1.15rem;
+  }
+  .overview-list li{margin:.4rem 0}
+  .overview-group{
+    border-top:1px solid var(--line);
+    padding-top:10px;
+    margin-top:10px;
+  }
+  .overview-group:first-of-type{
+    border-top:0;
+    padding-top:0;
+    margin-top:0;
+  }
+  .overview-group strong{
+    display:block;
+    margin-bottom:5px;
+  }
+  .mirror-empty{
+    color:#98a2b3;
+    font-style:italic;
+  }
+
+  .mirror-handwriting-wrap{
+    margin-top:9px;
+    padding-top:9px;
+    border-top:1px dashed var(--line);
+  }
+  .mirror-handwriting-label{
+    display:block;
+    margin-bottom:6px;
+    font-size:.76rem;
+    font-weight:750;
+    color:var(--muted);
+  }
+  .mirror-handwriting{
+    display:block;
+    width:100%;
+    max-height:150px;
+    object-fit:contain;
+    object-position:left top;
+    border:1px solid #e0e5ed;
+    border-radius:10px;
+    background:#fff;
+  }
+  .subjective-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+  .subjective-grid label{
+    font-size:.84rem;
+    font-weight:750;
+    color:#344054;
+  }
+  .subjective-grid input{
+    min-height:42px;
+    padding:9px 10px;
+  }
+
+  .choice-row{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:10px 0 2px;
+  }
+  .choice-row label{
+    border:1px solid var(--line);border-radius:10px;padding:10px 6px;text-align:center;
+    cursor:pointer;font-size:.82rem;font-weight:700;background:white;min-height:48px;
+  }
+  .choice-row input{display:none}
+  .choice-row label:has(input:checked){
+    background:var(--accent2);border-color:#7585d1;color:#243778
+  }
+
+  .button-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  button,.button-link{
+    border:0;border-radius:11px;padding:11px 14px;font:inherit;font-weight:800;cursor:pointer;
+    background:var(--accent);color:white;text-decoration:none;display:inline-flex;align-items:center;gap:7px;
+    min-height:44px;
+  }
+  button.secondary,.button-link.secondary{
+    background:white;color:var(--ink);border:1px solid var(--line)
+  }
+  button.danger{background:#fff;color:#a12f2f;border:1px solid #e7b7b7}
+
+  .source-mini{font-size:.88rem;color:var(--muted)}
+  .sources li{margin:.55rem 0}
+  .tiny{font-size:.82rem;color:var(--muted)}
+  .footer{text-align:center;color:var(--muted);font-size:.84rem;padding:16px 8px 0}
+
+  @media(max-width:900px){
+    .case-grid,.tips-grid,.judgment-grid,.meta-grid,.criteria-grid{grid-template-columns:1fr}
+    .full{grid-column:auto}
+    .choice-row{grid-template-columns:1fr 1fr}
+  }
+
+  /* iPad: Urteilsgrundlagen bewusst in drei Spalten nebeneinander. */
+  @media(min-width:701px) and (max-width:900px){
+    .criteria-overview{
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:8px;
+    }
+    .overview-card{
+      min-width:0;
+      padding:11px;
+      min-height:0;
+      font-size:.82rem;
+    }
+    .overview-card h3{font-size:.92rem}
+    .overview-card .overview-sub{font-size:.73rem;margin-bottom:8px}
+    .overview-group{padding-top:7px;margin-top:7px}
+    .overview-group strong{font-size:.8rem}
+  }
+
+  @media(max-width:700px){
+    .criteria-overview{grid-template-columns:1fr}
+    main{padding:18px 12px 55px}
+    .hero,.section{padding:18px}
+    .topbar-inner{align-items:flex-start}
+    .nav{
+      overflow:auto;flex-wrap:nowrap;width:100%;
+      padding-bottom:3px;scrollbar-width:none
+    }
+    .nav::-webkit-scrollbar{display:none}
+    .nav a{white-space:nowrap}
+    .save-note{display:none}
+    .field-inline{align-items:flex-start;flex-direction:column}
+    h1{font-size:1.9rem}
+    .choice-row{grid-template-columns:1fr}
+  }
+
+  @media(min-width:768px) and (max-width:1180px){
+    main{padding-left:22px;padding-right:22px}
+    .hero,.section{padding:22px}
+    .table-wrap{border-radius:16px}
+  }
+
+
+  @media (max-width:700px), (pointer:coarse){
+    .hero,.section{box-shadow:0 2px 10px rgba(31,41,55,.05)}
+    .drag-chip{box-shadow:none}
+    .topbar{position:static}
+    *{scroll-behavior:auto}
+  }
+
+  @media print{
+    body{background:white}
+    .topbar,.button-row{display:none!important}
+    main{max-width:none;padding:0}
+    .hero,.section{box-shadow:none;break-inside:avoid;border-color:#bbb}
+    details{break-inside:avoid}
+    details > *{display:block!important}
+    summary::after{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">Bodyscan bei Stress</div>
+    <nav class="nav" aria-label="Schritte">
+      <a href="#schritt1">1 · Übungsprotokoll</a>
+      <a href="#schritt2">2 · Fachinfo</a>
+      <a href="#schritt3">3 · Übersicht</a>
+      <a href="#schritt4">4 · Fälle</a>
+      <a href="#schritt5">5 · Sachurteil</a>
+      <a href="#schritt6">6 · Transfer</a>
+    </nav>
+    <div class="save-note">Eingaben werden automatisch auf diesem Gerät gespeichert.</div>
+  </div>
+</div>
+
+<main>
+  <header class="hero">
+    <div class="eyebrow">Q2 GK PER</div>
+    <h1>Bodyscan bei Stress – wann ist er das passende Werkzeug?</h1>
+    <div class="meta-grid">
+      <div class="field-inline"><label for="names">Name(n)</label><input id="names" type="text" data-save="names" placeholder="Namen eintragen"></div>
+      <div class="field-inline"><label for="date">Datum</label><input id="date" type="text" data-save="date" placeholder="Datum eintragen"></div>
+    </div>
+  </header>
+
+  
+  <section class="section" id="schritt1">
+    <div class="stephead">
+      <div class="stepno">1</div>
+      <div><h2>Übungsprotokoll</h2></div>
+    </div>
+
+    <div class="task"><strong>Arbeitsauftrag:</strong> Erfasst eure Wahrnehmung unmittelbar vor und nach dem Bodyscan. <strong>0 = trifft gar nicht zu, 10 = trifft voll zu.</strong></div>
+
+    <div class="protocol-wrap">
+      <table class="protocol-table">
+        <thead>
+          <tr>
+            <th>Kriterium</th>
+            <th>Vorher</th>
+            <th>Nachher</th>
+            <th>Veränderung</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="protocol-criterion">1. Mein Atem ist ruhig und gleichmäßig.</td>
+            <td><select class="protocol-select" data-save="proto_breathcalm_before" aria-label="Atem ruhig und gleichmäßig vorher">
+                <option value="">– auswählen –</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select></td>
+            <td><select class="protocol-select" data-save="proto_breathcalm_after" aria-label="Atem ruhig und gleichmäßig nachher">
+                <option value="">– auswählen –</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select></td>
+            <td><div id="res_breathcalm" class="protocol-result empty">noch nicht vollständig</div></td>
+          </tr>
+          <tr>
+            <td class="protocol-criterion">2. Meine Atemfrequenz (Atemzüge pro Minute)</td>
+            <td><input class="protocol-number" type="number" min="1" max="60" inputmode="numeric" data-save="proto_breathfreq_before" placeholder="Atemzüge/Min."></td>
+            <td><input class="protocol-number" type="number" min="1" max="60" inputmode="numeric" data-save="proto_breathfreq_after" placeholder="Atemzüge/Min."></td>
+            <td><div id="res_breathfreq" class="protocol-result empty">noch nicht vollständig</div></td>
+          </tr>
+          <tr>
+            <td class="protocol-criterion">3. Meine Muskeln fühlen sich locker an.</td>
+            <td><select class="protocol-select" data-save="proto_muscle_before" aria-label="Muskeln locker vorher">
+                <option value="">– auswählen –</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select></td>
+            <td><select class="protocol-select" data-save="proto_muscle_after" aria-label="Muskeln locker nachher">
+                <option value="">– auswählen –</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select></td>
+            <td><div id="res_muscle" class="protocol-result empty">noch nicht vollständig</div></td>
+          </tr>
+          <tr>
+            <td class="protocol-criterion">4. Meine Hände, Füße und mein Körper fühlen sich warm an.</td>
+            <td><select class="protocol-select" data-save="proto_warmth_before" aria-label="Wärmeempfinden vorher">
+                <option value="">– auswählen –</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select></td>
+            <td><select class="protocol-select" data-save="proto_warmth_after" aria-label="Wärmeempfinden nachher">
+                <option value="">– auswählen –</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select></td>
+            <td><div id="res_warmth" class="protocol-result empty">noch nicht vollständig</div></td>
+          </tr>
+          <tr>
+            <td class="protocol-criterion">5. Meine Gedanken sind ruhig und gesammelt.</td>
+            <td><select class="protocol-select" data-save="proto_thoughts_before" aria-label="Gedanken ruhig und gesammelt vorher">
+                <option value="">– auswählen –</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select></td>
+            <td><select class="protocol-select" data-save="proto_thoughts_after" aria-label="Gedanken ruhig und gesammelt nachher">
+                <option value="">– auswählen –</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select></td>
+            <td><div id="res_thoughts" class="protocol-result empty">noch nicht vollständig</div></td>
+          </tr>
+          <tr>
+            <td class="protocol-criterion">6. Ich fühle mich entspannt und wohl.</td>
+            <td><select class="protocol-select" data-save="proto_wellbeing_before" aria-label="Entspannt und wohl vorher">
+                <option value="">– auswählen –</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select></td>
+            <td><select class="protocol-select" data-save="proto_wellbeing_after" aria-label="Entspannt und wohl nachher">
+                <option value="">– auswählen –</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select></td>
+            <td><div id="res_wellbeing" class="protocol-result empty">noch nicht vollständig</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+<div class="button-row"><a class="button-link" href="#schritt2">Weiter zu Schritt 2 ↓</a></div>
+  </section>
+
+  <section class="section" id="schritt2">
+    <div class="stephead">
+      <div class="stepno">2</div>
+      <div><h2>Fachinformationen zum Bodyscan</h2></div>
+    </div>
+
+    <div class="task"><strong>Arbeitsauftrag:</strong> Lies den Fachtext aufmerksam und beantworte im Anschluss die Fragen bei Aufgabe 3.</div>
+
+    <div class="fachtext">
+      <p>Beim Bodyscan wird die Aufmerksamkeit nacheinander auf verschiedene Körperbereiche gelenkt. Häufig beginnt die Wahrnehmung bei den Füßen und wandert über Beine, Rumpf und Arme bis zum Kopf. Empfindungen wie Wärme, Kälte, Druck, Kribbeln, Spannung oder Lockerheit werden bewusst wahrgenommen, ohne sie sofort verändern oder bewerten zu müssen. Abschweifende Gedanken werden wahrgenommen und die Aufmerksamkeit anschließend wieder zur jeweiligen Körperregion zurückgeführt.</p>
+
+      <p>Die Dauer kann je nach Form variieren. Kurze Varianten dauern ungefähr 10–15 Minuten, ausführlichere Formen länger. In einer Studie wurden bereits nach einer einmaligen siebenminütigen Anwendung kurzfristige Veränderungen im subjektiven Stress- und Entspannungserleben erfasst.</p>
+
+      <p>Für die Durchführung sind eine bequeme Sitz- oder Liegeposition, möglichst wenige äußere Ablenkungen und ausreichend Zeit hilfreich. Die Augen können geschlossen oder geöffnet bleiben. Der Bodyscan kann die bewusste Wahrnehmung von Körperempfindungen und Anspannung unterstützen; kurzfristige Veränderungen des subjektiven Entspannungs- und Stresserlebens sind möglich.</p>
+
+      <p>Im schulischen Kontext kann ein Bodyscan sinnvoll sein, wenn das Ziel darin liegt, die eigene körperliche und psychische Befindlichkeit bewusster wahrzunehmen und aktuelle Anspannung gezielt zu regulieren.</p>
+
+      <p>Bei starkem Zeitdruck, äußerer Unruhe oder wenn konzentriertes Nach-innen-Richten schwerfällt, kann der Bodyscan weniger passend sein.</p>
+    </div>
+
+    <details>
+      <summary>Theoretische Basis: Lazarus & emotionsorientiertes Coping</summary>
+      <div class="details-body">
+        <p>Im transaktionalen Stressmodell hängt die Stressreaktion nicht allein vom Ereignis ab, sondern wesentlich davon, <strong>wie die Person die Situation bewertet</strong> und welche Bewältigungsressourcen sie wahrnimmt. Die in der Reihe erprobten Entspannungstechniken werden als <strong>emotionsorientierte Coping-Strategien</strong> eingeordnet: Sie beseitigen den Stressor nicht zwingend, können aber auf die körperliche und emotionale Stressreaktion zielen.</p>
+        <p class="source-mini">Grundlage: Lazarus & Folkman (1984); Meyer (2020, S. 493–494).</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Quellenhinweis öffnen</summary>
+      <div class="details-body sources">
+        <p>Der Fachtext wurde für den Unterricht sprachlich gekürzt und aus fachwissenschaftlichen sowie sportdidaktischen Quellen zusammengeführt. Die Hinweise zur bewussten Wahrnehmung der körperlichen und psychischen Befindlichkeit, zur situations- und personenbezogenen Auswahl sowie zu geeigneten schulischen Rahmenbedingungen stützen sich insbesondere auf Burkhard & Meyer (2007) und Giese & Sass-Bayer (2008).</p>
+        <ul>
+          <li>Pizzoli, S. F. M., Marzorati, C., Mazzoni, D., & Pravettoni, G. (2020). <em>Web-based relaxation intervention for stress during social isolation: Randomized controlled trial.</em> JMIR Mental Health, 7(12), e22757. <a href="https://doi.org/10.2196/22757" target="_blank" rel="noopener">DOI öffnen</a></li>
+          <li>Gan, R., Zhang, L., & Chen, S. (2022). <em>The effects of body scan meditation: A systematic review and meta-analysis.</em> Applied Psychology: Health and Well-Being, 14(3), 1062–1080. <a href="https://doi.org/10.1111/aphw.12366" target="_blank" rel="noopener">DOI öffnen</a></li>
+          <li>Burkhard, H., & Meyer, T. (2007). Entspannungstraining im Schulsport: Wege zu einer individuellen psychophysischen Regulationskompetenz. <em>Lehrhilfen für den Sportunterricht, 56</em>(10), 7–12.</li>
+          <li>Giese, M., & Sass-Bayer, R. (2008). An- und Entspannen: Balance finden im Sportunterricht und im Schulalltag. <em>SportPraxis, 49</em>(2), 25–29.</li>
+          <li>Falk, H. (2003). <em>Entspannung als Element der Gesundheitsförderung im Schulsport: Ein Vergleich westlicher und fernöstlicher Entspannungsverfahren</em> [Dissertation, Universität Regensburg]. <a href="https://doi.org/10.5283/epub.10079" target="_blank" rel="noopener">Quelle öffnen</a></li>
+          <li>Meyer, J. (2020). <em>Sport in der gymnasialen Oberstufe</em> (2., überarb. Aufl.). Meyer & Meyer.</li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="button-row"><a class="button-link" href="#schritt3">Weiter zu Schritt 3 ↓</a></div>
+  </section>
+
+  <section class="section" id="schritt3">
+    <div class="stephead">
+      <div class="stepno">3</div>
+      <div><h2>Fachinformationen selbst herausarbeiten</h2></div>
+    </div>
+
+    <div class="task"><strong>Arbeitsauftrag:</strong> Entnehmt dem Fachtext die Informationen, die für die Methodenübersicht wichtig sind. Formuliert sie <strong>in Stichworten</strong>. Nennt in jedem Bereich <strong>zwei unterschiedliche Informationen</strong>. Klickt anschließend auf <strong>„Antworten prüfen“</strong>, um eure Ergebnisse automatisch in die Tabelle zu übertragen.</div>
+
+        <div class="extract-grid">
+      <div class="extract-card">
+        <div class="extract-number">A</div>
+        <div class="extract-content">
+          <label for="extract_conditions"><strong>Was muss in der Situation gegeben sein, damit der Bodyscan gut durchgeführt werden kann?</strong></label>
+          <p class="tiny">Nennt zwei unterschiedliche Bedingungen aus dem Fachtext und formuliert sie in Stichworten.</p>
+          <textarea id="extract_conditions" data-save="extract_conditions" placeholder="Formuliert zwei Bedingungen in Stichworten …"></textarea>
+          <div class="extract-status" id="status_conditions" aria-live="polite">Noch nicht geprüft.</div>
+        </div>
+      </div>
+
+      <div class="extract-card">
+        <div class="extract-number">B</div>
+        <div class="extract-content">
+          <label for="extract_effects"><strong>Was kann sich durch den Bodyscan bei einer Person verändern oder bewusster werden?</strong></label>
+          <p class="tiny">Nennt zwei unterschiedliche mögliche Wirkungen aus dem Fachtext und formuliert sie in Stichworten.</p>
+          <textarea id="extract_effects" data-save="extract_effects" placeholder="Formuliert zwei mögliche Wirkungen in Stichworten …"></textarea>
+          <div class="extract-status" id="status_effects" aria-live="polite">Noch nicht geprüft.</div>
+        </div>
+      </div>
+
+      <div class="extract-card">
+        <div class="extract-number">C</div>
+        <div class="extract-content">
+          <label for="extract_limits"><strong>Welche Merkmale einer Situation können gegen den Einsatz des Bodyscans sprechen?</strong></label>
+          <p class="tiny">Nennt zwei unterschiedliche Grenzen aus dem Fachtext und formuliert sie in Stichworten.</p>
+          <textarea id="extract_limits" data-save="extract_limits" placeholder="Formuliert zwei Grenzen in Stichworten …"></textarea>
+          <div class="extract-status" id="status_limits" aria-live="polite">Noch nicht geprüft.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="button-row method-check-row">
+      <button type="button" id="checkExtraction">Antworten prüfen</button>
+      <button type="button" class="secondary" id="resetExtraction">Eingaben zurücksetzen</button>
+      <a class="button-link secondary" href="#schritt2">Fachtext noch einmal lesen ↑</a>
+    </div>
+    <div class="method-check-feedback" id="extractionFeedback" aria-live="polite">Formuliert zuerst eure Antworten und prüft sie anschließend gemeinsam.</div>
+
+    <h3 style="margin-top:24px">Methodenübersicht</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Kriterium</th><th>4-7-8-Atmung</th><th>PMR</th><th>Bodyscan</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Dauer der Methode</td>
+            <td class="known">1 Zyklus: 4 s einatmen, 7 s halten, 8 s ausatmen; häufig 4 Zyklen</td>
+            <td class="known">meist ca. 10–20 Min.; Varianten ca. 5–28 Min.</td>
+            <td class="known"><strong>ca. 10–15 Min.</strong>; Kurzformen auch kürzer (in einer Studie: 7 Min.); ausführliche Varianten länger</td>
+          </tr>
+          <tr>
+            <td>Durchführung / Ablauf</td>
+            <td class="known">Atemrhythmus 4–7–8 wiederholen</td>
+            <td class="known">Muskelgruppen nacheinander anspannen, lösen und nachspüren</td>
+            <td class="known">Aufmerksamkeit nacheinander auf einzelne Körperbereiche lenken; Empfindungen wahrnehmen; bei Abschweifen Aufmerksamkeit zurückführen</td>
+          </tr>
+          <tr>
+            <td>Rahmenbedingungen / Hilfsmittel</td>
+            <td class="known">keine Hilfsmittel; sitzend/liegend; fast überall möglich</td>
+            <td class="known">ruhige Umgebung hilfreich; bequeme Position; ggf. Matte/Audio</td>
+            <td class="editcell">
+              <textarea data-save="tbl_conditions" id="hidden_conditions" style="display:none"></textarea>
+              <div id="table_conditions" class="student-table-answer mirror-empty">wird nach erfolgreicher Prüfung aus eurer Antwort übernommen</div>
+            </td>
+          </tr>
+          <tr>
+            <td>Fokus des Verfahrens</td>
+            <td class="known">Atmung, verlängertes Ausatmen, Atemrhythmus</td>
+            <td class="known">Muskelanspannung und -entspannung</td>
+            <td class="known"><strong>Achtsamkeit</strong>; bewusste Wahrnehmung von Körperempfindungen und Körperbereichen</td>
+          </tr>
+          <tr>
+            <td>Mögliche Wirkungen</td>
+            <td class="known">kurzfristige Beruhigung / Entspannung möglich</td>
+            <td class="known">körperliche Entspannung; weniger Anspannung möglich</td>
+            <td class="editcell">
+              <textarea data-save="tbl_effects" id="hidden_effects" style="display:none"></textarea>
+              <div id="table_effects" class="student-table-answer mirror-empty">wird nach erfolgreicher Prüfung aus eurer Antwort übernommen</div>
+            </td>
+          </tr>
+          <tr>
+            <td>Mögliche Grenzen</td>
+            <td class="known">Atemhalten kann ungewohnt sein; ggf. Schwindel / Unwohlsein</td>
+            <td class="known">benötigt Zeit und Ruhe; bewusste Anspannung nicht für jede Person angenehm</td>
+            <td class="editcell">
+              <textarea data-save="tbl_limits" id="hidden_limits" style="display:none"></textarea>
+              <div id="table_limits" class="student-table-answer mirror-empty">wird nach erfolgreicher Prüfung aus eurer Antwort übernommen</div>
+            </td>
+          </tr>
+          <tr>
+            <td>Einordnung nach Lazarus</td>
+            <td class="known">emotionsorientiertes Coping: Regulation der Stressreaktion</td>
+            <td class="known">emotionsorientiertes Coping: Regulation körperlicher Anspannung</td>
+            <td class="known"><strong>emotionsorientiertes Coping</strong>: achtsame Wahrnehmung und Regulation der körperlichen und psychischen Stressreaktion</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="button-row"><a class="button-link" href="#schritt4">Weiter zu Schritt 4 ↓</a></div>
+  </section>
+
+  <section class="section" id="schritt4">
+    <div class="stephead">
+      <div class="stepno">4</div>
+      <div><h2>Fallbeispiele erschließen</h2></div>
+    </div>
+
+    <div class="task">
+      <strong>Arbeitsauftrag:</strong>
+      <ol style="margin:.55rem 0 0 1.2rem;padding:0">
+        <li><strong>Partnerin 1</strong> liest Fall A, <strong>Partnerin 2</strong> liest Fall B.</li>
+        <li>Arbeitet jeweils die situativen Bedingungen heraus, die für die Eignung einer Entspannungstechnik bedeutsam sein könnten.</li>
+        <li>Stellt euch euren Fall anschließend gegenseitig kurz vor. Öffnet danach beide Karten für die gemeinsame Abwägung.</li>
+      </ol>
+    </div>
+
+    <div class="case-grid">
+      <details class="case-card case-a">
+        <summary>Fall A · Nach einem Streit</summary>
+        <div class="details-body case-body">
+          <p>Mara ist nach einem Streit noch angespannt. Ihre Schultern fühlen sich fest an, ihre Atmung ist etwas schneller und ihre Gedanken kreisen noch um das Gespräch. Es fällt ihr schwer, sich auf etwas anderes zu konzentrieren und die Gedanken loszulassen. Sie hat 15 Minuten Zeit und kann sich in einem ruhigen Zimmer hinsetzen oder hinlegen.</p>
+        </div>
+      </details>
+
+      <details class="case-card case-b">
+        <summary>Fall B · Kurz vor einer Präsentation</summary>
+        <div class="details-body case-body">
+          <p>Lina hat gleich eine wichtige Präsentation. Ihre Gedanken sind geordnet, aber ihre Atmung ist deutlich schneller und ihre Bauch- und Beinmuskeln sind angespannt. Sie sitzt allein in einem ruhigen Nebenraum und kann sich bequem hinsetzen. Voraussichtlich hat sie dort nur noch 10 Minuten Zeit für sich; danach kann sie jederzeit abgeholt werden. Sie muss aufmerksam und sofort einsatzbereit bleiben.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="criteria-grid">
+      <div class="criterion">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <strong style="margin-bottom:0">Wichtige situative Bedingungen in Fall A</strong>
+          <details style="display:inline-block;border:0;background:transparent;overflow:visible">
+            <summary style="padding:3px 8px;min-height:auto;border:1px solid var(--line);border-radius:999px;background:#f8fafc;font-size:.76rem;font-weight:750">Tipp</summary>
+            <div class="details-body" style="padding:8px 0 0;font-size:.82rem;color:var(--muted)">Achtet z. B. auf verfügbare Zeit, Ruhe/Ablenkung, körperliche Reaktionen, Gedanken und Ziel der Person.</div>
+          </details>
+        </div>
+        <textarea data-save="caseA_conditions" placeholder="Stichpunkte …"></textarea>
+
+        <details class="handwriting-details">
+          <summary>Handschriftlich mit Apple Pencil ergänzen</summary>
+          <div class="handwriting-panel">
+            <p class="tiny">Tippt hier, wenn ihr eure Stichpunkte zusätzlich handschriftlich festhalten möchtet.</p>
+            <div class="handwriting-canvas-wrap">
+              <canvas class="handwriting-canvas" id="caseAHandwriting" data-handwriting-key="caseA_handwriting" aria-label="Handschriftliche Notizen zu Fall A"></canvas>
+            </div>
+            <div class="button-row" style="margin-top:10px">
+              <button type="button" class="secondary" data-clear-handwriting="caseAHandwriting">Handschrift löschen</button>
+            </div>
+          </div>
+        </details>
+      </div>
+      <div class="criterion">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <strong style="margin-bottom:0">Wichtige situative Bedingungen in Fall B</strong>
+          <details style="display:inline-block;border:0;background:transparent;overflow:visible">
+            <summary style="padding:3px 8px;min-height:auto;border:1px solid var(--line);border-radius:999px;background:#f8fafc;font-size:.76rem;font-weight:750">Tipp</summary>
+            <div class="details-body" style="padding:8px 0 0;font-size:.82rem;color:var(--muted)">Achtet z. B. auf verfügbare Zeit, Ruhe/Ablenkung, körperliche Reaktionen, Gedanken und Ziel der Person.</div>
+          </details>
+        </div>
+        <textarea data-save="caseB_conditions" placeholder="Stichpunkte …"></textarea>
+
+        <details class="handwriting-details">
+          <summary>Handschriftlich mit Apple Pencil ergänzen</summary>
+          <div class="handwriting-panel">
+            <p class="tiny">Tippt hier, wenn ihr eure Stichpunkte zusätzlich handschriftlich festhalten möchtet.</p>
+            <div class="handwriting-canvas-wrap">
+              <canvas class="handwriting-canvas" id="caseBHandwriting" data-handwriting-key="caseB_handwriting" aria-label="Handschriftliche Notizen zu Fall B"></canvas>
+            </div>
+            <div class="button-row" style="margin-top:10px">
+              <button type="button" class="secondary" data-clear-handwriting="caseBHandwriting">Handschrift löschen</button>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="button-row"><a class="button-link" href="#schritt5">Weiter zu Schritt 5 ↓</a></div>
+  </section>
+
+  <section class="section" id="schritt5">
+    <div class="stephead">
+      <div class="stepno">5</div>
+      <div><h2>Begründetes Sachurteil</h2></div>
+    </div>
+
+    <div class="task"><strong>Arbeitsauftrag:</strong> Beurteilt die situationsbezogene Eignung des Bodyscans als emotionsorientierte Coping-Strategie. <strong>Entscheidet euch begründet für den Fall, für den der Bodyscan geeigneter ist.</strong> Wägt Pro- und Contra-Argumente ab und erläutert, warum der Bodyscan zu diesem Fall besser passt als zum anderen Fall. Bezieht dabei eure <strong>kriteriengeleitet erfassten Erfahrungen, fachlichen Erkenntnisse und situativen Bedingungen</strong> ein.</div>
+
+    <h3 style="margin-top:18px">Urteilsgrundlagen im Überblick</h3>
+
+    <div class="criteria-overview">
+      <div class="overview-card">
+        <h3>1 · Fachliche Kriterien</h3>
+        <p class="overview-sub">aus der Methodenübersicht</p>
+
+        <div class="overview-group">
+          <strong>Dauer</strong>
+          <div>ca. 10–15 Min.; Kurzformen auch kürzer; ausführliche Varianten länger</div>
+        </div>
+
+        <div class="overview-group">
+          <strong>Durchführung / Ablauf</strong>
+          <div>Aufmerksamkeit nacheinander auf einzelne Körperbereiche lenken; Empfindungen wahrnehmen; bei Abschweifen Aufmerksamkeit zurückführen</div>
+        </div>
+
+        <div class="overview-group">
+          <strong>Rahmenbedingungen</strong>
+          <div id="mirror_conditions" class="mirror-empty">noch kein Eintrag</div>
+        </div>
+
+        <div class="overview-group">
+          <strong>Fokus</strong>
+          <div>Achtsamkeit; bewusste Wahrnehmung von Körperempfindungen und Körperbereichen</div>
+        </div>
+
+        <div class="overview-group">
+          <strong>Mögliche Wirkungen</strong>
+          <div id="mirror_effects" class="mirror-empty">noch kein Eintrag</div>
+        </div>
+
+        <div class="overview-group">
+          <strong>Mögliche Grenzen</strong>
+          <div id="mirror_limits" class="mirror-empty">noch kein Eintrag</div>
+        </div>
+
+        <div class="overview-group">
+          <strong>Einordnung</strong>
+          <div>emotionsorientiertes Coping: achtsame Wahrnehmung und Regulation der körperlichen und psychischen Stressreaktion</div>
+        </div>
+      </div>
+
+      <div class="overview-card">
+        <h3>2 · Situative Kriterien</h3>
+        <p class="overview-sub">aus den Fallbeispielen</p>
+
+        <div class="overview-group">
+          <strong>Fall A</strong>
+          <div id="mirror_caseA" class="mirror-empty">noch kein Eintrag</div>
+          <div id="mirror_caseA_handwriting_wrap" class="mirror-handwriting-wrap" hidden>
+            <span class="mirror-handwriting-label">Handschriftliche Ergänzung</span>
+            <img id="mirror_caseA_handwriting" class="mirror-handwriting" alt="Handschriftliche Notizen zu Fall A">
+          </div>
+        </div>
+
+        <div class="overview-group">
+          <strong>Fall B</strong>
+          <div id="mirror_caseB" class="mirror-empty">noch kein Eintrag</div>
+          <div id="mirror_caseB_handwriting_wrap" class="mirror-handwriting-wrap" hidden>
+            <span class="mirror-handwriting-label">Handschriftliche Ergänzung</span>
+            <img id="mirror_caseB_handwriting" class="mirror-handwriting" alt="Handschriftliche Notizen zu Fall B">
+          </div>
+        </div>
+      </div>
+
+      <div class="overview-card">
+        <h3>3 · Subjektive Kriterien</h3>
+        <p class="overview-sub">automatisch aus eurem Übungsprotokoll</p>
+
+        <div class="overview-group">
+          <strong>Atemruhe / Gleichmäßigkeit</strong>
+          <div id="mirror_proto_breathcalm" class="mirror-empty">noch nicht vollständig</div>
+        </div>
+
+        <div class="overview-group">
+          <strong>Atemfrequenz</strong>
+          <div id="mirror_proto_breathfreq" class="mirror-empty">noch nicht vollständig</div>
+        </div>
+
+        <div class="overview-group">
+          <strong>Muskuläre Lockerheit</strong>
+          <div id="mirror_proto_muscle" class="mirror-empty">noch nicht vollständig</div>
+        </div>
+
+        <div class="overview-group">
+          <strong>Wärmeempfinden</strong>
+          <div id="mirror_proto_warmth" class="mirror-empty">noch nicht vollständig</div>
+        </div>
+
+        <div class="overview-group">
+          <strong>Gedankenruhe / gedankliche Sammlung</strong>
+          <div id="mirror_proto_thoughts" class="mirror-empty">noch nicht vollständig</div>
+        </div>
+
+        <div class="overview-group">
+          <strong>Subjektives Entspannungs- / Wohlbefinden</strong>
+          <div id="mirror_proto_wellbeing" class="mirror-empty">noch nicht vollständig</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tips-grid">
+      <details>
+        <summary>Hilfen für eure Abwägung</summary>
+        <div class="details-body">
+          <ul>
+            <li>Welche im Fachtext genannte mögliche Wirkung des Bodyscans wäre für den Fall bedeutsam?</li>
+            <li>Passen <strong>Dauer und Ablauf</strong> zur verfügbaren Zeit und zum Ziel der Person?</li>
+            <li>Sind die erforderlichen <strong>Rahmenbedingungen</strong> gegeben: Ruhe, Konzentration, bequeme Position und möglichst ungestörte Zeit?</li>
+            <li>Welche kriteriengeleitet erfasste Erfahrung aus eurem Vorher-Nachher-Protokoll stützt euer Urteil?</li>
+            <li>Welches fachliche oder situative Kriterium <strong>relativiert</strong> euer Urteil?</li>
+            <li>Wie gewichtet ihr die Argumente? Welches Argument ist für euer abschließendes Urteil entscheidend?</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>Mögliche Formulierungen</summary>
+        <div class="details-body">
+          <p><strong>Beispiele:</strong></p>
+          <p><strong>Eigene Erfahrung:</strong> „Meine Atemfrequenz blieb gleich, aber meine Gedanken waren ruhiger und gesammelter. Das kann für … sprechen.“</p>
+          <p><strong>Rahmenbedingungen:</strong> „Der Bodyscan braucht … und möglichst … . Das kann gegen die Anwendung sprechen, wenn … .“</p>
+          <p><strong>Abwägung:</strong> „Für Fall … spricht besonders … . Dagegen spricht … . Entscheidend gewichten wir jedoch …, weil … .“</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="note"><strong>Denkt daran:</strong> Fachinformation + eigene Erfahrung + Situation werden <strong>nicht einfach gesammelt</strong>, sondern gegeneinander abgewogen.</div>
+
+    <div class="criterion" style="margin-top:16px">
+      <strong style="font-size:1.05rem">Unser Sachurteil</strong>
+
+      <details style="margin:10px 0 12px">
+        <summary>Satzanfänge</summary>
+        <div class="details-body">
+          <p style="margin-top:0">„Wir entscheiden uns für Fall …, weil der Bodyscan hier …“</p>
+          <p>„Dafür spricht …“</p>
+          <p>„Gleichzeitig könnte … gegen die Anwendung sprechen, jedoch …“</p>
+          <p style="margin-bottom:0">„Der Bodyscan ist für Fall … geeigneter als für Fall …, weil …“</p>
+        </div>
+      </details>
+
+      <textarea data-save="judgment_final" placeholder="Entscheidet euch für Fall A oder Fall B und begründet, warum der Bodyscan für diesen Fall geeigneter ist als für den anderen …" style="min-height:180px"></textarea>
+    </div>
+
+    <details class="handwriting-details judgment-handwriting">
+      <summary>Sachurteil handschriftlich mit Apple Pencil festhalten</summary>
+      <div class="handwriting-panel">
+        <p class="tiny">Tippt hier, um die große Schreibfläche zu öffnen und euer Sachurteil handschriftlich festzuhalten.</p>
+        <div class="handwriting-canvas-wrap">
+          <canvas class="handwriting-canvas" id="judgmentHandwriting" data-handwriting-key="judgment_handwriting" aria-label="Handschriftliche Ausarbeitung zum Sachurteil"></canvas>
+        </div>
+        <div class="button-row" style="margin-top:10px">
+          <button type="button" class="secondary" data-clear-handwriting="judgmentHandwriting">Handschrift löschen</button>
+        </div>
+      </div>
+    </details>
+<div class="button-row"><a class="button-link" href="#schritt6">Weiter zur Sprinter-Aufgabe ↓</a></div>
+  </section>
+
+  <section class="section" id="schritt6">
+    <div class="stephead">
+      <div class="stepno">6</div>
+      <div><h2>Kurztransfer · Sprinteraufgabe</h2></div>
+    </div>
+
+    <div class="note" style="margin-top:0"><strong>Hinweis:</strong> Bearbeitet die Sprinter-Aufgabe nur, wenn ihr mit eurem begründeten Sachurteil vollständig fertig seid.</div>
+
+    <details>
+      <summary>Aufgabe öffnen</summary>
+      <div class="details-body">
+        <div class="task" style="margin-top:0"><strong>Arbeitsauftrag:</strong> Beurteilt anhand der Methodenübersicht, welche bereits bekannte Entspannungstechnik für <strong>eines der Fallbeispiele</strong> ebenfalls geeignet sein könnte. Begründet eure Entscheidung mit mindestens zwei Kriterien.</div>
+        <div class="judgment-grid">
+          <div>
+            <label><strong>Fall</strong></label>
+            <select data-save="transfer_case">
+              <option value="">auswählen …</option>
+              <option>Fall A</option>
+              <option>Fall B</option>
+            </select>
+          </div>
+          <div>
+            <label><strong>Andere Technik</strong></label>
+            <select data-save="transfer_method">
+              <option value="">auswählen …</option>
+              <option>4-7-8-Atmung</option>
+              <option>Progressive Muskelrelaxation (PMR)</option>
+            </select>
+          </div>
+          <div class="full">
+            <label><strong>Begründung mit mindestens zwei Kriterien aus der Methodentabelle oben</strong></label>
+            <textarea data-save="transfer_reason" placeholder="Für Fall … könnte … ebenfalls geeignet sein, weil …"></textarea>
+          </div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <section class="section">
+    <h2>Eure Arbeit sichern</h2>
+    <p class="tiny">Die Seite sendet nichts an einen Server. Texte und Handschrift werden nur im Browser dieses Geräts gespeichert.</p>
+    <div class="button-row">
+      <button type="button" id="copyBtn">Antworten als Text kopieren</button>
+      <button type="button" class="secondary" onclick="window.print()">Drucken / als PDF sichern</button>
+      <button type="button" class="danger" id="resetBtn">Alle Eingaben zurücksetzen</button>
+    </div>
+    <p class="tiny" id="copyStatus" aria-live="polite"></p>
+  </section>
+
+  <div class="footer">Bodyscan bei Stress · Q2 GK PER</div>
+</main>
+
+<script>
+(function(){
+  const prefix = "bodyscan_upp_v2_";
+
+  function save(el){
+    const key = el.dataset.save;
+    if(!key) return;
+    localStorage.setItem(prefix + key, el.value);
+  }
+
+  const saveTimers = new WeakMap();
+  document.querySelectorAll("[data-save]").forEach(el=>{
+    const stored = localStorage.getItem(prefix + el.dataset.save);
+    if(stored !== null) el.value = stored;
+    el.addEventListener("input", ()=>{
+      clearTimeout(saveTimers.get(el));
+      const timer = setTimeout(()=>save(el), 180);
+      saveTimers.set(el, timer);
+    });
+    el.addEventListener("change", ()=>save(el));
+    el.addEventListener("blur", ()=>save(el));
+  });
+
+  document.querySelectorAll("[data-save-radio]").forEach(el=>{
+    const key = el.dataset.saveRadio;
+    const stored = localStorage.getItem(prefix + key);
+    if(stored === el.value) el.checked = true;
+    el.addEventListener("change", ()=>{
+      if(el.checked) localStorage.setItem(prefix + key, el.value);
+    });
+  });
+
+  // Schritt 3: freie Informationsentnahme statt Zuordnungsaufgabe.
+  const extractionStateKey = prefix + "methods_extraction_state_v1";
+  const extractionAreas = {
+    conditions: document.getElementById("extract_conditions"),
+    effects: document.getElementById("extract_effects"),
+    limits: document.getElementById("extract_limits")
+  };
+  const extractionStatus = {
+    conditions: document.getElementById("status_conditions"),
+    effects: document.getElementById("status_effects"),
+    limits: document.getElementById("status_limits")
+  };
+  const extractionFeedback = document.getElementById("extractionFeedback");
+  const checkExtractionBtn = document.getElementById("checkExtraction");
+  const resetExtractionBtn = document.getElementById("resetExtraction");
+  let extractionCheckCount = 0;
+  let extractionConfirmed = false;
+
+  // Je Unterarray steht für EINEN fachlichen Aspekt. Mehrere Begriffe darin sind zulässige Formulierungsvarianten.
+  const conceptPatterns = {
+    conditions: [
+      [/bequem/i,/komfort/i,/sitz/i,/lieg/i,/position/i,/haltung/i],
+      [/ruh/i,/wenig.*ablenk/i,/ablenk.*wenig/i,/ungest[oö]rt/i,/st[oö]rungsarm/i,/äußer.*ablenk/i],
+      [/ausreichend.*zeit/i,/genug.*zeit/i,/zeit.*vorhand/i,/zeitfenster/i],
+      [/augen.*offen/i,/augen.*geschlossen/i,/augen.*geöffnet/i,/augen.*schließ/i]
+    ],
+    effects: [
+      [/k[oö]rper.*wahr/i,/k[oö]rperempfind/i,/k[oö]rpersignal/i,/anspann.*wahr/i,/bewusst.*k[oö]rper/i],
+      [/stress.*ver[aä]nder/i,/stress.*weniger/i,/stress.*reduz/i,/entspann.*ver[aä]nder/i,/entspann.*mehr/i,/entspann.*m[oö]glich/i,/stress.*erleben/i,/entspann.*erleben/i]
+    ],
+    limits: [
+      [/zeitdruck/i,/wenig.*zeit/i,/keine.*zeit/i,/hekt/i],
+      [/äußer.*unruh/i,/unruh.*umgebung/i,/laut/i,/ablenk/i,/st[oö]r/i],
+      [/nach.*innen/i,/innen.*richt/i,/konzent.*schwer/i,/aufmerksamkeit.*k[oö]rper.*schwer/i,/fokus.*k[oö]rper.*schwer/i]
+    ]
+  };
+
+  function normalizeAnswer(text){
+    return (text || "").replace(/\s+/g," ").trim();
+  }
+
+  function matchedConcepts(kind, text){
+    const value = normalizeAnswer(text);
+    if(!value) return 0;
+    return conceptPatterns[kind].filter(patternGroup=>patternGroup.some(rx=>rx.test(value))).length;
+  }
+
+  function setExtractionStatus(kind, count){
+    const el = extractionStatus[kind];
+    if(!el) return;
+    el.classList.remove("good","warn");
+    if(count >= 2){
+      el.textContent = "✓ 2 von 2 relevanten Aspekten erkannt.";
+      el.classList.add("good");
+    }else{
+      el.textContent = count + " von 2 relevanten Aspekten erkannt. Prüft den Fachtext noch einmal.";
+      el.classList.add("warn");
+    }
+  }
+
+  function setExtractionFeedback(message, kind=""){
+    if(!extractionFeedback) return;
+    extractionFeedback.textContent = message;
+    extractionFeedback.classList.remove("good","warn");
+    if(kind) extractionFeedback.classList.add(kind);
+  }
+
+  function saveExtractionState(){
+    const state = {
+      checks: extractionCheckCount,
+      confirmed: extractionConfirmed
+    };
+    localStorage.setItem(extractionStateKey, JSON.stringify(state));
+  }
+
+  function copyConfirmedAnswersToTable(){
+    const pairs = [
+      ["conditions","hidden_conditions","table_conditions","mirror_conditions"],
+      ["effects","hidden_effects","table_effects","mirror_effects"],
+      ["limits","hidden_limits","table_limits","mirror_limits"]
+    ];
+    pairs.forEach(([kind,inputId,tableId,mirrorId])=>{
+      const value = normalizeAnswer(extractionAreas[kind]?.value);
+      const input = document.getElementById(inputId);
+      const table = document.getElementById(tableId);
+      const mirror = document.getElementById(mirrorId);
+      if(input){
+        input.value = value;
+        save(input);
+      }
+      if(table){
+        table.textContent = value || "noch kein bestätigter Eintrag";
+        table.classList.toggle("mirror-empty", !value);
+        table.classList.toggle("confirmed", !!value);
+      }
+      if(mirror){
+        mirror.textContent = value || "noch kein bestätigter Eintrag";
+        mirror.classList.toggle("mirror-empty", !value);
+      }
+    });
+  }
+
+  function clearTableAnswers(){
+    [["hidden_conditions","table_conditions","mirror_conditions"],
+     ["hidden_effects","table_effects","mirror_effects"],
+     ["hidden_limits","table_limits","mirror_limits"]].forEach(([inputId,tableId,mirrorId])=>{
+      const input = document.getElementById(inputId);
+      const table = document.getElementById(tableId);
+      const mirror = document.getElementById(mirrorId);
+      if(input){ input.value=""; save(input); }
+      if(table){
+        table.textContent="wird nach erfolgreicher Prüfung aus eurer Antwort übernommen";
+        table.classList.add("mirror-empty");
+        table.classList.remove("confirmed");
+      }
+      if(mirror){ mirror.textContent="noch kein bestätigter Eintrag"; mirror.classList.add("mirror-empty"); }
+    });
+  }
+
+  function checkExtraction(){
+    extractionCheckCount += 1;
+    const counts = {};
+    let allGood = true;
+    Object.keys(extractionAreas).forEach(kind=>{
+      counts[kind] = matchedConcepts(kind, extractionAreas[kind]?.value || "");
+      setExtractionStatus(kind, Math.min(2, counts[kind]));
+      if(counts[kind] < 2) allGood = false;
+    });
+
+    if(allGood){
+      extractionConfirmed = true;
+      copyConfirmedAnswersToTable();
+      setExtractionFeedback("✓ In allen drei Bereichen sind mindestens zwei unterschiedliche fachlich passende Aspekte enthalten. Eure eigenen Formulierungen wurden in die Methodenübersicht übernommen.","good");
+    }else{
+      extractionConfirmed = false;
+      clearTableAnswers();
+      if(extractionCheckCount === 1){
+        setExtractionFeedback("Noch nicht vollständig. Die Rückmeldung zeigt nur die Anzahl erkannter Aspekte. Vergleicht eure Formulierungen erneut mit dem Fachtext – die fehlenden Lösungen werden nicht eingeblendet.","warn");
+      }else if(extractionCheckCount === 2){
+        setExtractionFeedback("Prüft besonders, ob ihr pro Bereich wirklich zwei verschiedene Informationen nennt und nicht denselben Gedanken nur anders formuliert.","warn");
+      }else{
+        setExtractionFeedback("Noch fehlen fachlich passende Aspekte. Geht zum Fachtext zurück und sucht gezielt nach Bedingungen der Durchführung, möglichen Veränderungen und Situationen, in denen der Bodyscan weniger passend ist.","warn");
+      }
+    }
+    saveExtractionState();
+  }
+
+  function resetExtraction(){
+    Object.values(extractionAreas).forEach(el=>{
+      if(!el) return;
+      el.value="";
+      save(el);
+    });
+    Object.values(extractionStatus).forEach(el=>{
+      if(!el) return;
+      el.textContent="Noch nicht geprüft.";
+      el.classList.remove("good","warn");
+    });
+    extractionCheckCount=0;
+    extractionConfirmed=false;
+    localStorage.removeItem(extractionStateKey);
+    clearTableAnswers();
+    setExtractionFeedback("Formuliert zuerst eure Antworten und prüft sie anschließend gemeinsam.");
+  }
+
+  checkExtractionBtn?.addEventListener("click",checkExtraction);
+  resetExtractionBtn?.addEventListener("click",resetExtraction);
+
+  try{
+    const savedExtractionState = JSON.parse(localStorage.getItem(extractionStateKey) || "{}");
+    extractionCheckCount = Number(savedExtractionState.checks) || 0;
+    extractionConfirmed = !!savedExtractionState.confirmed;
+    if(extractionConfirmed){
+      const allStillGood = Object.keys(extractionAreas).every(kind=>matchedConcepts(kind, extractionAreas[kind]?.value || "") >= 2);
+      if(allStillGood){
+        Object.keys(extractionAreas).forEach(kind=>setExtractionStatus(kind,2));
+        copyConfirmedAnswersToTable();
+        setExtractionFeedback("✓ Eure geprüften Antworten sind in die Methodenübersicht übernommen.","good");
+      }else{
+        extractionConfirmed=false;
+        clearTableAnswers();
+      }
+    }
+  }catch(err){
+    extractionCheckCount=0;
+    extractionConfirmed=false;
+  }
+
+  if(!extractionConfirmed) clearTableAnswers();
+
+  // Übungsprotokoll: Veränderung automatisch auswerten und als Urteilsgrundlage spiegeln.
+  // Bei den Kriterien 1, 3, 4, 5 und 6 bedeutet ein höherer Nachher-Wert eine Verbesserung.
+  // Bei der Atemfrequenz bedeutet ein niedrigerer Nachher-Wert eine Verbesserung.
+  const protocolRows = [
+    {before:"proto_breathcalm_before", after:"proto_breathcalm_after", result:"res_breathcalm", mirror:"mirror_proto_breathcalm", direction:"higher", kind:"points"},
+    {before:"proto_breathfreq_before", after:"proto_breathfreq_after", result:"res_breathfreq", mirror:"mirror_proto_breathfreq", direction:"lower", kind:"breaths"},
+    {before:"proto_muscle_before", after:"proto_muscle_after", result:"res_muscle", mirror:"mirror_proto_muscle", direction:"higher", kind:"points"},
+    {before:"proto_warmth_before", after:"proto_warmth_after", result:"res_warmth", mirror:"mirror_proto_warmth", direction:"higher", kind:"points"},
+    {before:"proto_thoughts_before", after:"proto_thoughts_after", result:"res_thoughts", mirror:"mirror_proto_thoughts", direction:"higher", kind:"points"},
+    {before:"proto_wellbeing_before", after:"proto_wellbeing_after", result:"res_wellbeing", mirror:"mirror_proto_wellbeing", direction:"higher", kind:"points"}
+  ];
+
+  function formatNumber(n){
+    if(Number.isInteger(n)) return String(n);
+    return n.toFixed(1).replace(".", ",");
+  }
+
+  function changeUnit(row, amount){
+    if(row.kind === "breaths"){
+      return amount === 1 ? " Atemzug/Min." : " Atemzüge/Min.";
+    }
+    return amount === 1 ? " Punkt" : " Punkte";
+  }
+
+  function updateProtocolRow(row){
+    const beforeEl = document.querySelector('[data-save="'+row.before+'"]');
+    const afterEl = document.querySelector('[data-save="'+row.after+'"]');
+    const resultEl = document.getElementById(row.result);
+    const mirrorEl = document.getElementById(row.mirror);
+    if(!beforeEl || !afterEl) return;
+
+    const bRaw = beforeEl.value;
+    const aRaw = afterEl.value;
+    const complete = bRaw !== "" && aRaw !== "";
+
+    if(!complete){
+      if(resultEl){
+        resultEl.textContent = "noch nicht vollständig";
+        resultEl.classList.add("empty");
+      }
+      if(mirrorEl){
+        mirrorEl.textContent = "noch nicht vollständig";
+        mirrorEl.classList.add("mirror-empty");
+      }
+      return;
+    }
+
+    const before = Number(bRaw);
+    const after = Number(aRaw);
+    const signedImprovement = row.direction === "lower"
+      ? before - after
+      : after - before;
+    const amount = Math.abs(signedImprovement);
+
+    let summary;
+    if(signedImprovement > 0){
+      summary = "Verbesserung um " + formatNumber(amount) + changeUnit(row, amount);
+    }else if(signedImprovement < 0){
+      summary = "Verschlechterung um " + formatNumber(amount) + changeUnit(row, amount);
+    }else{
+      summary = "keine Veränderung";
+    }
+
+    if(resultEl){
+      resultEl.textContent = summary;
+      resultEl.classList.remove("empty");
+    }
+    if(mirrorEl){
+      mirrorEl.textContent = summary;
+      mirrorEl.classList.remove("mirror-empty");
+    }
+  }
+
+  protocolRows.forEach(row=>{
+    const beforeEl = document.querySelector('[data-save="'+row.before+'"]');
+    const afterEl = document.querySelector('[data-save="'+row.after+'"]');
+    updateProtocolRow(row);
+    [beforeEl, afterEl].forEach(el=>{
+      if(el){
+        el.addEventListener("input",()=>updateProtocolRow(row));
+        el.addEventListener("change",()=>updateProtocolRow(row));
+      }
+    });
+  });
+
+  // Handschriftliche Schreibfelder für Fall A, Fall B und das Sachurteil.
+  // Fingerkontakt wird ignoriert; Apple Pencil (pointerType "pen") und Maus funktionieren.
+  const handwritingStates = new Map();
+
+  const handwritingMirrors = {
+    caseAHandwriting:{imgId:"mirror_caseA_handwriting",wrapId:"mirror_caseA_handwriting_wrap"},
+    caseBHandwriting:{imgId:"mirror_caseB_handwriting",wrapId:"mirror_caseB_handwriting_wrap"}
+  };
+
+  function updateHandwritingMirror(canvasId, imageData){
+    const config = handwritingMirrors[canvasId];
+    if(!config) return;
+    const img = document.getElementById(config.imgId);
+    const wrap = document.getElementById(config.wrapId);
+    if(!img || !wrap) return;
+    if(imageData){
+      img.src = imageData;
+      wrap.hidden = false;
+    }else{
+      img.removeAttribute("src");
+      wrap.hidden = true;
+    }
+  }
+
+  function initHandwritingCanvas(canvas){
+    if(!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    const storageKey = prefix + (canvas.dataset.handwritingKey || canvas.id);
+    const state = {
+      canvas, ctx, storageKey, drawing:false, lastX:0, lastY:0,
+      restoreImage:localStorage.getItem(storageKey) || ""
+    };
+    handwritingStates.set(canvas.id,state);
+    updateHandwritingMirror(canvas.id,state.restoreImage);
+
+    function setupCanvas(){
+      const rect = canvas.getBoundingClientRect();
+      if(rect.width < 10 || rect.height < 10) return;
+
+      const previousImage = state.restoreImage;
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      canvas.width = Math.max(1, Math.round(rect.width * dpr));
+      canvas.height = Math.max(1, Math.round(rect.height * dpr));
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.strokeStyle = "#172033";
+      ctx.lineWidth = 2.1;
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0,0,rect.width,rect.height);
+
+      if(previousImage){
+        const img = new Image();
+        img.onload = ()=>ctx.drawImage(img,0,0,rect.width,rect.height);
+        img.src = previousImage;
+      }
+    }
+
+    function pointFromEvent(e){
+      const rect = canvas.getBoundingClientRect();
+      return {x:e.clientX - rect.left, y:e.clientY - rect.top};
+    }
+
+    function startDrawing(e){
+      if(e.pointerType === "touch") return;
+      e.preventDefault();
+      const p = pointFromEvent(e);
+      state.drawing = true;
+      state.lastX = p.x;
+      state.lastY = p.y;
+      try{ canvas.setPointerCapture(e.pointerId); }catch(_){}
+    }
+
+    function draw(e){
+      if(!state.drawing) return;
+      e.preventDefault();
+      const p = pointFromEvent(e);
+      ctx.beginPath();
+      ctx.moveTo(state.lastX,state.lastY);
+      ctx.lineTo(p.x,p.y);
+      ctx.stroke();
+      state.lastX = p.x;
+      state.lastY = p.y;
+    }
+
+    function finishDrawing(e){
+      if(!state.drawing) return;
+      state.drawing = false;
+      try{ canvas.releasePointerCapture(e.pointerId); }catch(_){}
+      try{
+        state.restoreImage = canvas.toDataURL("image/png");
+        localStorage.setItem(storageKey,state.restoreImage);
+        updateHandwritingMirror(canvas.id,state.restoreImage);
+      }catch(_){}
+    }
+
+    canvas.addEventListener("pointerdown",startDrawing);
+    canvas.addEventListener("pointermove",draw);
+    canvas.addEventListener("pointerup",finishDrawing);
+    canvas.addEventListener("pointercancel",finishDrawing);
+
+    const details = canvas.closest("details.handwriting-details");
+    if(details){
+      details.addEventListener("toggle",()=>{
+        if(details.open) requestAnimationFrame(setupCanvas);
+      });
+      if(details.open) requestAnimationFrame(setupCanvas);
+    }else{
+      requestAnimationFrame(setupCanvas);
+    }
+
+    state.setupCanvas = setupCanvas;
+  }
+
+  document.querySelectorAll("canvas.handwriting-canvas").forEach(initHandwritingCanvas);
+
+  document.querySelectorAll("[data-clear-handwriting]").forEach(button=>{
+    button.addEventListener("click",()=>{
+      const state = handwritingStates.get(button.dataset.clearHandwriting);
+      if(!state) return;
+      state.restoreImage = "";
+      localStorage.removeItem(state.storageKey);
+      updateHandwritingMirror(state.canvas.id,"");
+      state.setupCanvas();
+    });
+  });
+
+  let handwritingResizeTimer;
+  window.addEventListener("resize",()=>{
+    clearTimeout(handwritingResizeTimer);
+    handwritingResizeTimer = setTimeout(()=>{
+      handwritingStates.forEach(state=>{
+        const details = state.canvas.closest("details.handwriting-details");
+        if(!details || details.open) state.setupCanvas();
+      });
+    },150);
+  });
+
+  // Bereits erarbeitete Kriterien in Schritt 5 automatisch bündeln.
+  const mirrors = [
+    ["tbl_conditions","mirror_conditions"],
+    ["tbl_effects","mirror_effects"],
+    ["tbl_limits","mirror_limits"],
+    ["caseA_conditions","mirror_caseA"],
+    ["caseB_conditions","mirror_caseB"]
+  ];
+
+  function updateMirror(sourceKey, targetId){
+    const source = document.querySelector('[data-save="'+sourceKey+'"]');
+    const target = document.getElementById(targetId);
+    if(!source || !target) return;
+    const value = source.value.trim();
+    target.textContent = value || "noch kein Eintrag";
+    target.classList.toggle("mirror-empty", !value);
+  }
+
+  mirrors.forEach(([sourceKey,targetId])=>{
+    const source = document.querySelector('[data-save="'+sourceKey+'"]');
+    updateMirror(sourceKey,targetId);
+    if(source){
+      source.addEventListener("input",()=>updateMirror(sourceKey,targetId));
+      source.addEventListener("change",()=>updateMirror(sourceKey,targetId));
+    }
+  });
+
+  function collect(){
+    const lines = [];
+    lines.push("Bodyscan bei Stress – Arbeitsstand");
+    lines.push("=================================");
+    const names = document.querySelector('[data-save="names"]')?.value || "";
+    const date = document.querySelector('[data-save="date"]')?.value || "";
+    lines.push("Name(n): " + names);
+    lines.push("Datum: " + date);
+    lines.push("");
+
+    const labels = {
+      tbl_conditions:"Bodyscan – Rahmenbedingungen",
+      tbl_effects:"Bodyscan – mögliche Wirkungen",
+      tbl_limits:"Bodyscan – Grenzen",
+      caseA_conditions:"Situative Bedingungen Fall A",
+      caseB_conditions:"Situative Bedingungen Fall B",
+      proto_breathcalm_before:"Übungsprotokoll – Atemruhe vorher",
+      proto_breathcalm_after:"Übungsprotokoll – Atemruhe nachher",
+      proto_breathfreq_before:"Übungsprotokoll – Atemfrequenz vorher",
+      proto_breathfreq_after:"Übungsprotokoll – Atemfrequenz nachher",
+      proto_muscle_before:"Übungsprotokoll – muskuläre Lockerheit vorher",
+      proto_muscle_after:"Übungsprotokoll – muskuläre Lockerheit nachher",
+      proto_warmth_before:"Übungsprotokoll – Wärmeempfinden vorher",
+      proto_warmth_after:"Übungsprotokoll – Wärmeempfinden nachher",
+      proto_thoughts_before:"Übungsprotokoll – Gedankenruhe vorher",
+      proto_thoughts_after:"Übungsprotokoll – Gedankenruhe nachher",
+      proto_wellbeing_before:"Übungsprotokoll – Entspannungs-/Wohlbefinden vorher",
+      proto_wellbeing_after:"Übungsprotokoll – Entspannungs-/Wohlbefinden nachher",
+      judgment_final:"Sachurteil – abschließende Beurteilung",
+      position:"Position A–B",
+      position_reason:"Entscheidendes Kriterium",
+      transfer_case:"Kurztransfer – Fall",
+      transfer_method:"Kurztransfer – Technik",
+      transfer_reason:"Kurztransfer – Begründung",
+      meta_final:"Meta-Fazit"
+    };
+
+    Object.entries(labels).forEach(([key,label])=>{
+      const el = document.querySelector('[data-save="'+key+'"]');
+      if(el && el.value.trim()) lines.push(label + ": " + el.value.trim());
+    });
+
+    const tendency = document.querySelector('input[name="tendency"]:checked');
+    if(tendency) lines.push("Tendenz: " + tendency.parentElement.textContent.trim());
+
+    return lines.join("\n");
+  }
+
+  document.getElementById("copyBtn").addEventListener("click", async ()=>{
+    const status = document.getElementById("copyStatus");
+    try{
+      await navigator.clipboard.writeText(collect());
+      status.textContent = "✓ Antworten wurden in die Zwischenablage kopiert.";
+    }catch(e){
+      status.textContent = "Kopieren wurde vom Browser blockiert. Nutzt alternativ Drucken / als PDF sichern.";
+    }
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", ()=>{
+    if(!confirm("Wirklich alle Eingaben und Handschriften auf diesem Gerät zurücksetzen?")) return;
+    Object.keys(localStorage).filter(k=>k.startsWith(prefix)).forEach(k=>localStorage.removeItem(k));
+    location.reload();
+  });
+})();
+</script>
+</body>
+</html>
